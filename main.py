@@ -7,9 +7,9 @@ import json
 import re
 
 def clean_gpt_json(text):
-    cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip(), flags=re.IGNORECASE)
-    cleaned = re.sub(r"\s*```
-    return cleaned
+    # Remove triple-backtick code block, with or without 'json'
+    return re.sub(r'^``````$', '', text.strip(), flags=re.IGNORECASE)
+
 
 USER_ID = "user1"
 
