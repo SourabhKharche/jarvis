@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from firebase_utils import save_to_firestore
+from firebase_utils import save_reminder, get_reminder
 
 reminders_bp = Blueprint("reminders_bp", __name__)
 
