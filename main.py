@@ -6,9 +6,10 @@ import firebase_utils
 import json
 import re
 
-def clean_gpt_json(text):
-    # Remove triple-backtick code block, with or without 'json'
-    return re.sub(r'^``````$', '', text.strip(), flags=re.IGNORECASE)
+def clean_gpt_json(text: str) -> str:
+    """Remove triple-backtick code blocks (with or without language tags like 'json')."""
+    return re.sub(r'```(?:json)?\s*([\s\S]*?)\s*```', r'\1', text.strip(), flags=re.IGNORECASE)
+
 
 
 USER_ID = "user1"
