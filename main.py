@@ -53,7 +53,7 @@ def handle_input(text):
             results.append(notes.get_notes(db, USER_ID))
 
         elif action_matches(action, "set reminder", "remember", "remind me", "reminder_create", "save_reminder"):
-            results.append(reminders.set_reminder(db, USER_ID, content, time))
+            results.append(reminders.get_reminder(db, USER_ID, content, time))
 
         elif action_matches(action, "get reminders", "what did i ask you to remember", "what was the reminder", "reminders_retrieve", "get_reminders"):
             results.append(reminders.get_reminders(db, USER_ID))

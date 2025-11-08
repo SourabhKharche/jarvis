@@ -14,7 +14,7 @@ def save_reminder(db, userid, message, reminder_time=None):
     reminders_ref.add(reminder_data)
     return f"Reminder saved: \"{message}\"" + (f" at {reminder_time}" if reminder_time else "")
 
-def get_reminder(db, userid):
+def get_reminder(db, userid, content, time):
 
     reminders_ref = db.collection("users").document(userid).collection("reminders")
     reminders = reminders_ref.order_by("created_at", direction=firestore.Query.DESCENDING).stream()
