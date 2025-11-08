@@ -1,6 +1,6 @@
 import notes
 import reminders
-import info
+#import info
 import gpt_handler
 import firebase_utils
 import json
@@ -42,9 +42,9 @@ def handle_input(text):
         # Get all reminders for this user
         return reminders.get_reminders(db, USER_ID)
 
-    elif action == "info" and content:
+    #elif action == "info" and content:
         # Get general info (using GPT or API logic inside info.py)
-        return info.get_general_info(content)
+        #return info.get_general_info(content)
 
     else:
         return "Sorry, I didn't understand the command."
