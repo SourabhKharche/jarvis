@@ -1,13 +1,13 @@
 import notes
 import reminders
-#import info
+# import info
 import gpt_handler
 import firebase_utils
 import json
 import re
 
 def clean_gpt_json(text):
-    # Remove markdown code block (`````` and ``````)
+    # Remove triple-backtick code block with or without 'json', handling newlines and whitespace
     return re.sub(r"^``````$", "", text.strip(), flags=re.IGNORECASE)
 
 USER_ID = "user1"
@@ -25,6 +25,8 @@ def handle_input(text):
 
     # Clean up formatting from GPT's response (if any)
     intent_json_clean = clean_gpt_json(intent_json)
+    print("Cleaned GPT JSON:", intent_json_clean)  # For debug
+
     try:
         intent = json.loads(intent_json_clean)
     except Exception as e:
@@ -47,8 +49,8 @@ def handle_input(text):
     elif action_matches(action, "get reminders", "what did i ask you to remember", "what was the reminder", "reminders_retrieve", "get_reminders"):
         return reminders.get_reminders(db, USER_ID)
 
-    #elif action_matches(action, "info", "get info", "info_query") and content:
-    #    return info.get_general_info(content)
+    # elif action_matches(action, "info", "get info", "info_query") and content:
+    #     return info.get_general_info(content)
 
     else:
         return "Sorry, I didn't understand the command."
