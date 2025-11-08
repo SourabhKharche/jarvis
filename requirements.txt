@@ -1,3 +1,4 @@
-firebase-admin
+flask
 openai
-elevenlabs         # If using Eleven Labs TTS
+python-dotenv
+requests
