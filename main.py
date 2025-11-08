@@ -6,6 +6,12 @@ import firebase_utils
 import json
 import re
 
+def clean_gpt_json(text):
+    # Remove markdown code block (e.g., ``````)
+    # Handles with/without "json" and line breaks
+    return re.sub(r"^``````$", "", text.strip(), flags=re.IGNORECASE)
+
+
 USER_ID = "user1"
 
 # Initialize Firebase once at startup
@@ -27,10 +33,12 @@ def handle_input(text):
     intent_json_clean = clean_gpt_json(intent_json)
 
     # Parse intent from the JSON string
+   intent_json_clean = clean_gpt_json(intent_json)
     try:
         intent = json.loads(intent_json_clean)
     except Exception as e:
         return f"Sorry, couldn't parse intent: {e}"
+
 
     action = intent.get('action')
     content = intent.get('content')
