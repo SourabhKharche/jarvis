@@ -1,0 +1,3 @@
+firebase-admin
+openai
+elevenlabs         # If using Eleven Labs TTS
