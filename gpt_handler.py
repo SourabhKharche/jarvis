@@ -3,7 +3,7 @@ import openai
 
 def interpret_command(text):
     # Load your OpenAI key from environment variable
-    openai.api_key = os.getenv("OpenAI_API_key")
+    openai.api_key = os.getenv("OPENAI_API_KEY")
     if not openai.api_key:
         raise ValueError("Missing OPENAI_API_KEY environment variable")
 
@@ -14,9 +14,12 @@ def interpret_command(text):
         model="gpt-4o",
         messages=[
             {"role": "system", "content":
-             """(You are JARVIS, an intelligent personal assistant. Respond with valid JSON only)
+             """You are JARVIS, an intelligent personal assistant. 
+Always respond with valid JSON, using only the format specified. 
+If the user's command includes multiple actions (e.g., both save a note and set a reminder), 
+respond as a JSON array: each object must contain a single action according to the spec below.
 
-Response Format:
+Response Format for one action:
 {
   "action": "<action_type>",
   "content": "<extracted_content>",
@@ -29,32 +32,29 @@ Response Format:
   }
 }
 
+For multiple actions, respond as an array:
+[
+  { /* note object */ },
+  { /* reminder object */ }
+]
+
 Action Types:
-
 1. NOTE_CREATE - When user wants to save information
-   Triggers: "note this down", "remember this", "take note", "jot this down"
-   Extract the actual content without command phrases
-   Identify action items and urgency
-   Example: "Take note that I have to work on my startup codebase today"
-   Output: {"action": "NOTE_CREATE", "content": "Work on startup codebase", "metadata": {"intent": "task_reminder", "priority": "high", "category": "work", "keywords": ["startup", "codebase", "today"]}}
-
-2. NOTE_RETRIEVE - When user wants to recall notes
-   Triggers: "what did I ask you to note", "what did I tell you", "remind me what"
-   Extract search parameters from the query
-   Example: "What did I ask you to note about my startup?"
-   Output: {"action": "NOTE_RETRIEVE", "content": "Query notes related to startup", "metadata": {"intent": "recall_request", "keywords": ["startup"]}}
+2. REMINDER_CREATE - When user wants to set a reminder
+3. NOTE_RETRIEVE - When user wants to recall notes
+4. REMINDER_RETRIEVE - When user wants to recall reminders
 
 Context Rules:
 - Extract keywords for better searchability
 - Detect time references: "today", "tomorrow" = high priority; "sometime", "later" = low priority
-- Identify action verbs: "work on", "finish", "complete", "call"
-- If unclear, default to INFO_REQUEST
-
-Always output valid JSON. Be concise and extract actionable information."""
+- Identify and split separate requests if present
+- Only output valid JSON, with no commentary, no markdown, and no explanations.
+- If the user's command mixes a note and a reminder, output both in the correct array format.
+"""
             },
             {"role": "user", "content": text}
         ],
     )
 
-    # Parse and return the response text (which should be a JSON string)
+    # Parse and return the response text (which should be a JSON string or a JSON array string)
     return response.choices[0].message.content
