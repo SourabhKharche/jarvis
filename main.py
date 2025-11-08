@@ -27,18 +27,23 @@ def handle_input(text):
 
     # Route commands to the correct module
     if action == "note" and content:
+        # Save a note and acknowledge
         return notes.take_note(db, USER_ID, content)
 
     elif action == "get_notes":
+        # Retrieve notes for this user
         return notes.get_notes(db, USER_ID)
 
-    elif action == "reminder" and content and time:
+    elif action == "reminder" and content:
+        # Set a reminder; if time is None, handle default logic inside reminders.py
         return reminders.set_reminder(db, USER_ID, content, time)
 
     elif action == "get_reminders":
+        # Get all reminders for this user
         return reminders.get_reminders(db, USER_ID)
 
     elif action == "info" and content:
+        # Get general info (using GPT or API logic inside info.py)
         return info.get_general_info(content)
 
     else:
