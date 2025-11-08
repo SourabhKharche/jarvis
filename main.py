@@ -31,9 +31,6 @@ def handle_input(text):
 
     # Clean up formatting from GPT's response (if any)
     intent_json_clean = clean_gpt_json(intent_json)
-
-    # Parse intent from the JSON string
-   intent_json_clean = clean_gpt_json(intent_json)
     try:
         intent = json.loads(intent_json_clean)
     except Exception as e:
