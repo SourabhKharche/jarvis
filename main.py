@@ -7,10 +7,8 @@ import json
 import re
 
 def clean_gpt_json(text):
-    # Remove markdown code block (e.g., ``````)
-    # Handles with/without "json" and line breaks
+    # Remove markdown code block (`````` and ``````)
     return re.sub(r"^``````$", "", text.strip(), flags=re.IGNORECASE)
-
 
 USER_ID = "user1"
 
@@ -19,10 +17,6 @@ db = firebase_utils.init_firebase()
 
 def action_matches(action, *options):
     return action and action.lower() in [opt.lower() for opt in options]
-
-def clean_gpt_json(text):
-    # Remove markdown code block if present (e.g., `````` or ``````)
-    return re.sub(r"^``````$", "", text.strip(), flags=re.IGNORECASE | re.MULTILINE)
 
 def handle_input(text):
     # Send text to GPT for command interpretation
@@ -35,7 +29,6 @@ def handle_input(text):
         intent = json.loads(intent_json_clean)
     except Exception as e:
         return f"Sorry, couldn't parse intent: {e}"
-
 
     action = intent.get('action')
     content = intent.get('content')
@@ -55,7 +48,7 @@ def handle_input(text):
         return reminders.get_reminders(db, USER_ID)
 
     #elif action_matches(action, "info", "get info", "info_query") and content:
-        #return info.get_general_info(content)
+    #    return info.get_general_info(content)
 
     else:
         return "Sorry, I didn't understand the command."
