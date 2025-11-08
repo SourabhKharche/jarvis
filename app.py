@@ -23,8 +23,9 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 app = Flask(__name__)
 
 # Import route blueprints
-from routes.notes import notes_bp
-from routes.reminders import reminders_bp
+from notes import notes_bp
+from reminders import reminders_bp
+
 
 # Register blueprints
 app.register_blueprint(notes_bp)
@@ -85,3 +86,4 @@ def forward_to(handler_name, json_data):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
