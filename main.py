@@ -7,8 +7,9 @@ import json
 import re
 
 def clean_gpt_json(text):
-    return re.sub(r"^``````$", "", text.strip(), flags=re.IGNORECASE)
-
+    cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip(), flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s*```
+    return cleaned
 
 USER_ID = "user1"
 
