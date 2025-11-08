@@ -38,7 +38,7 @@ def handle_input(text):
 
     # Route commands to the correct module (case-insensitive, supports many synonyms)
     if action_matches(action, "note", "take note", "note this down", "create a note", "note_create", "add_note"):
-        return notes.take_note(db, USER_ID, content)
+        return notes.save_note(db, USER_ID, content)
 
     elif action_matches(action, "get notes", "what did i ask you to note", "retrieve notes", "what was the note", "what was in the note", "note_retrieve", "notes_retrieve", "get_notes"):
         return notes.get_notes(db, USER_ID)
