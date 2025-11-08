@@ -1,13 +1,18 @@
-import firebase_utils
+import notes
+import reminders
+import info
 import gpt_handler
+import firebase_utils
 import json
 
 USER_ID = "user1"
 
+# Initialize Firebase once at startup
+db = firebase_utils.init_firebase()
+
 def handle_input(text):
     # Send text to GPT for command interpretation
     intent_json = gpt_handler.interpret_command(text)
-
     print("GPT responded:", intent_json)  # For debug
 
     # Parse intent from the JSON string
@@ -18,23 +23,23 @@ def handle_input(text):
 
     action = intent.get('action')
     content = intent.get('content')
+    time = intent.get('time', None)
 
-    # Initialize Firebase (once, outside the function is best)
-    db = firebase_utils.init_firebase()
-
+    # Route commands to the correct module
     if action == "note" and content:
-        firebase_utils.save_note(db, USER_ID, content)
-        return f"Got it, I noted: {content}"
+        return notes.take_note(db, USER_ID, content)
 
-    elif action == "retrieve":
-        notes = firebase_utils.get_notes(db, USER_ID)
-        if notes:
-            return f"Your notes: " + ", ".join(n['text'] for n in notes)
-        else:
-            return "No notes recorded."
+    elif action == "get_notes":
+        return notes.get_notes(db, USER_ID)
+
+    elif action == "reminder" and content and time:
+        return reminders.set_reminder(db, USER_ID, content, time)
+
+    elif action == "get_reminders":
+        return reminders.get_reminders(db, USER_ID)
 
     elif action == "info" and content:
-        return content
+        return info.get_general_info(content)
 
     else:
         return "Sorry, I didn't understand the command."
